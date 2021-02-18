@@ -2,6 +2,7 @@
 by Jann Basso
 
 ## Result
+[Check here](https://jann-basso.github.io/javascript-data-visualisation/)
 
 ---
 ## Goal (by BeCode)
