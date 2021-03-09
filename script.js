@@ -11,82 +11,47 @@ window.onload = function() {
         toSecondElement.insertBefore(canvas1, toSecondElement.firstChild)
  
    
-        // AJAX request to get json
-        function ajaxGet(url, callback) {
-            setTimeout(function() {  // refresh update every 1 second
+        function getAjax() {
 
                 let xhttp = new XMLHttpRequest()
-                xhttp.onreadystatechange = function () {
+                xhttp.open("GET", "https://canvasjs.com/services/data/datapoints.php", true)
+                xhttp.onreadystatechange = function() {
                     if (xhttp.readyState == 4 && xhttp.status == 200) {
                         let data = JSON.parse(xhttp.responseText) //this has created several arrays inside "data"
-                        callback(data)
-                    }
-                }
-                xhttp.open("GET", url, true)
-                xhttp.send()
+                        console.log(data)
 
-            }, 1000)
-        }
-       
-        
+                        // get data (data labels gets index 0 of arrays inside "data"; and data info gets index 1 of same arrays)
+                        let dataLabels = data.map(function(e) {
+                            return e[0]
+                        })
+                        
+                        let dataInfo = data.map(function(e) {
+                            return e[1]
+                        })
+                                    
+                        console.log(dataLabels)
+                        console.log(dataInfo)
 
-        // call ajax function to manipulate data from json
-        ajaxGet("https://canvasjs.com/services/data/datapoints.php", function(data){
-            console.log(data)
-
-            // get data (data labels gets index 0 of arrays inside "data"; and data info gets index 1 of same arrays)
-            let dataLabels = data.map(function(e) {
-                return e[0]
-            })
-            
-            let dataInfo = data.map(function(e) {
-                return e[1]
-            })
-
-            console.log(dataLabels)
-            console.log(dataInfo)
-
-
-            // create chart
-            let ctxAjax = canvas1.getContext("2d")
-            let chartAjax = new Chart(ctxAjax, {
-                type: "line",
-                data: {
-                    labels: dataLabels,
-                    datasets: [{
-                        label: "Live Update",
-                        data: dataInfo,
-                        backgroundColor: "rgb(19, 33, 127)",
-                        borderWidth: 3
-                    }]                  
-                }                      
-            })
-
-            /*************************************** Personal Note: CHECK AGAIN ATTEMPTS BELLOW TO LEARN HOW TO DO IT DIFFERENTLY *****************************************/
-            /* 
-            // for each array inside "data", we will get the numbers and put them into a new array called "dataNums" (which will contain all info in one single array)
-            let dataNums = [] //put this array outside this function
-
-            // ATTEMPT 1 (array data --> run through it and push keys and values to new array dataNums)
-                data.forEach(getnumbers)
-                    function getnumbers(key, value) {
-                        dataNums.push({x: value[0], y: value[1]})
-                    }
-                    console.log(dataNums) 
-
-            
-            // ATTEMPT 2 (array data --> check its internal arrays --> for each internal array, run through and push keys and values to new array dataNums)
-                data.forEach(function(arrays){
-                    arrays.forEach(function (key, value) {
-                        dataNums.push({x: value[0], y: value[1]})
-                    })
-                })
-            //console.log(dataNums) */
-            /****************************************************************************************************************************************************************/
-
-
-        }) 
-            
+                        // create chart
+                        let ctxAjax = canvas1.getContext("2d")
+                        let chartAjax = new Chart(ctxAjax, {
+                            type: "line",
+                            data: {
+                                labels: dataLabels,
+                                datasets: [{
+                                    label: "Live Update",
+                                    data: dataInfo,
+                                    backgroundColor: "rgb(19, 33, 127)",
+                                    borderWidth: 3
+                                }]                  
+                            }                      
+                        })
+                    }   ’
+                 }
+                 xhttp.send()        
+            } 
+            setInterval(function(){getAjax()}, 1000)  
+            getAjax()
         
 
 
