@@ -11,10 +11,12 @@ window.onload = function() {
         toSecondElement.insertBefore(canvas1, toSecondElement.firstChild)
  
    
-        function getAjax() {
+        let i = 0 // counter to get more y numbers (since timeout is not catching different refreshments on link)
+
+            function getAjax() {
 
                 let xhttp = new XMLHttpRequest()
-                xhttp.open("GET", "https://canvasjs.com/services/data/datapoints.php", true)
+                xhttp.open("GET", "https://canvasjs.com/services/data/datapoints.php?ystart="+(i=i+1), true)
                 xhttp.onreadystatechange = function() {
                     if (xhttp.readyState == 4 && xhttp.status == 200) {
                         let data = JSON.parse(xhttp.responseText) //this has created several arrays inside "data"
@@ -46,12 +48,12 @@ window.onload = function() {
                                 }]                  
                             }                      
                         })
-                    }   
+                    }  
                  }
-                 xhttp.send()        
+                 xhttp.send()   
+                 setTimeout(function(){getAjax()}, 1000)       
             } 
-            setInterval(function(){getAjax()}, 1000)  
-            getAjax()
+            getAjax() 
         
 
 
